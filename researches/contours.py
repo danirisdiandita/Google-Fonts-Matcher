@@ -1,12 +1,18 @@
 import numpy as np
 import cv2 as cv
-im = cv.imread('test.png')
+import os 
+im = cv.imread('insideFigma.png')
+
 assert im is not None, "file could not be read, check with os.path.exists()"
+
+blank = np.ones(im.shape) * 255 
 imgray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(imgray, 127, 255, 0)
 
 contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 # print(contours[0])
+
+cv.drawContours(blank, contours, -1, (0, 0, 0), thickness=cv.FILLED)
 
 color = (0, 0, 255)
 thickness = 5
@@ -85,11 +91,36 @@ for key in merger:
 
 chars = newchars
 
-for i, ( x1, y1, x2, y2 ) in enumerate(chars): 
-    cv.rectangle(im, (x1,y1), (x2, y2), color, thickness)
-   
-    cv.putText(im, f'{i}', (int((x1 + x2)/2), int((y1+y2)/2)), cv.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 2)
-    
 
-cv.imwrite(f'output_{i:03}.png', im)
+if os.path.isdir('tmp') == False: 
+    os.makedirs('tmp')
+os.popen('rm -rf tmp/*').read()
+
+for i, ( x1, y1, x2, y2 ) in enumerate(chars): 
+    # cv.rectangle(im, (x1,y1), (x2, y2), color, thickness)
+    # cv.putText(im, f'{i}', (int((x1 + x2)/2), int((y1+y2)/2)), cv.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 2)
+    # print(im.shape, x1,y1,x2,y2)
+
+    # im shape shows height, width, dimension 
+    # cv.imwrite(f'tmp/output_{i:03}.png', blank[y1:y2,x1:x2,:])
+
+    fontvector = blank[y1:y2,x1:x2,:]
+    font_width = fontvector.shape[0]
+    font_height = fontvector.shape[1]
+
+    # create a square shape maxwidth or maxheight 
+    sidelength = max(font_height, font_width)
+    square = np.ones((sidelength, sidelength, 3)) * 255
+    # print(square.shape, end=', ')
+    square[(sidelength-font_width)//2: (sidelength+font_width)//2,(sidelength-font_height)//2: (sidelength+font_height)//2,:] = fontvector
+
+    # print(blank[y1:y2,x1:x2,:].shape)
+    square = cv.resize(square, (250, 250))
+    print(np.max(square, axis=-1).shape)
+    cv.imwrite(f'tmp/output_{i:03}.png', square)
+
+
+# cv.imwrite('blank.png', blank)
+
+# cv.imwrite(f'output_{i:03}.png', im)
 
