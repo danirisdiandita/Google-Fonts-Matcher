@@ -21,7 +21,7 @@ img = np.zeros((250,2500,3),np.uint8)
 # fontpath = "../fonts-main/ofl/nokora/Nokora-Black.ttf"
 # fontpath = '../fonts-main/ofl/montserrat/Montserrat-Italic[wght].ttf'
 fontpath = '../fonts-main/ofl/montserrat/Montserrat[wght].ttf'
-result = subprocess.run(['fc-scan', '--format', "%{fullname}\n", fontpath], capture_output=True, text=True)
+result = subprocess.run(['fc-scan', '--format', "%{fullname}, %{style}\n", fontpath], capture_output=True, text=True)
 print(result.stdout.strip('\n').split('\n'))
 font = ImageFont.FreeTypeFont(fontpath, size=250, index=1)
 nn = font.get_variation_names()
