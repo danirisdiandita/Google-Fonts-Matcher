@@ -137,7 +137,7 @@ newchars = []
 for i in range(0, len(contours_boundaries)): 
     if i not in to_merge and i not in to_removes and contours_boundaries[i] != None: 
         newchars.append(contours_boundaries[i])
-print('merger', merger)
+# print('merger', merger)
 for key in merger: 
     x1, y1, x2, y2 = contours_boundaries[key]
     X1, Y1, X2, Y2 = contours_boundaries[merger[key]]
@@ -145,7 +145,7 @@ for key in merger:
     print('len(newchars)', len(newchars))
 
 chars = newchars
-print(chars)
+# print(chars)
 
 
 for i, ( x1, y1, x2, y2 ) in enumerate(chars): 
