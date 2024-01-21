@@ -16,11 +16,18 @@
 from PIL import ImageFont, ImageDraw, Image 
 import cv2 
 import numpy as np 
-img = np.zeros((250,250,3),np.uint8)
-fontpath = "/home/dani/Researches/Google-Fonts-Matcher/fonts-main/ofl/roboto/Roboto[wdth,wght].ttf"
-font = ImageFont.truetype(fontpath, 250)
+import subprocess
+img = np.zeros((250,2500,3),np.uint8)
+# fontpath = "../fonts-main/ofl/nokora/Nokora-Black.ttf"
+# fontpath = '../fonts-main/ofl/montserrat/Montserrat-Italic[wght].ttf'
+fontpath = '../fonts-main/ofl/montserrat/Montserrat[wght].ttf'
+result = subprocess.run(['fc-scan', '--format', "%{fullname}\n", fontpath], capture_output=True, text=True)
+print(result.stdout.strip('\n').split('\n'))
+font = ImageFont.FreeTypeFont(fontpath, size=250, index=1)
+nn = font.get_variation_names()
+print(nn)
 img_pil = Image.fromarray(img)
 draw = ImageDraw.Draw(img_pil)
-draw.text((0,0), "R", font=font, fill=(255,255,255,0))
+draw.text((0,0), "Montserrat", font=font, fill=(255,255,255,0))
 img = np.array(img_pil)
 cv2.imwrite("R.png", img)
