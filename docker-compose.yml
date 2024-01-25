@@ -1,0 +1,20 @@
+version: '3.3'
+services:
+  font-matcher-db: 
+    container_name: font-matcher-db
+    image: postgres:13
+    ports:
+      - 5826:5432
+    environment:
+      - POSTGRES_USER=fontmatcher
+      - POSTGRES_PASSWORD=iTxTJHgchF8PDzRvhqGHBkhDfWb
+      - POSTGRES_DB=fonts
+  # font-matcher: 
+  #   container_name: font-matcher 
+  #   build: . 
+  #   volumes:
+  #     - ./fonts-main:/app/fonts-main
+  #     - ./fonts:/usr/share/fonts 
+  #     - ./:/app
+  #   ports:
+  #     - 5000:5000 
